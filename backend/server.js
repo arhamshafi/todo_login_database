@@ -3,6 +3,7 @@ const app = express()
 let cors = require("cors")
 let mongoose = require("mongoose")
 let new_users = require("./modules/sign_up")
+let todo_list = require("./modules/todo")
 
 app.use(cors())
 app.use(express.json())
@@ -19,6 +20,7 @@ app.post("/sign_up", async (req, res) => {
         if (existing) {
             return res.json({ success: false })
         }
+        
         let user = new new_users(req.body)
         await user.save()
         res.json({ message: `Login Successfully By  ${user.firstName} ${user.lastName} `, user: user, success: true })
@@ -55,10 +57,29 @@ app.post("/login", async (req, res) => {
 
 })
 
-// app.post("/todo" , (req , res)=>{
-//     console.log(req.body);
-    
-// })
+app.post("/todo", async (req, res) => {
+
+    try {
+        let todo = new todo_list(req.body)
+        await todo.save()
+        res.json({ list: todo, not: true })
+    }
+    catch (err) {
+        console.log("list error", err);
+    }
+
+})
+
+app.get("/all_todo_list", async (req, res) => {
+    try {
+        let all_todo = await todo_list.find()
+        res.json({ todo_list: all_todo })
+    }
+    catch (err) {
+        console.log("error in access todo", err);
+
+    }
+})
 
 
 

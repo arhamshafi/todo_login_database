@@ -4,9 +4,9 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 
-function Sign_up({ lodaer , setcrnt_user }) {
+function Sign_up({ lodaer, setcrnt_user }) {
     const navigate = useNavigate();
-   
+
 
 
     const formik = useFormik({
@@ -39,19 +39,18 @@ function Sign_up({ lodaer , setcrnt_user }) {
             try {
 
                 let res = await axios.post("http://localhost:4500/sign_up", values)
-                if(res.data.sms){
-
+                if (res.data.success) {
                     setcrnt_user(res.data)
                     resetForm()
-                    alert( res.data.message )
-                    setTimeout(()=>{
+                    alert(res.data.message)
+                    setTimeout(() => {
                         navigate("/dashboard")
-                        
-                    },1500)
+                    }, 1500)
                 }
-                else{
+                else {
                     alert("This Email is Already Exist !! Try Again ")
                 }
+
 
             }
             catch (error) {
